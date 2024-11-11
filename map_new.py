@@ -15,7 +15,7 @@ df = pd.read_csv("final_lat.csv", encoding=encoding
 city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
 
 def create_dataframe(loca):
-    """Create a crime heatmap centered on the specified location."""
+    
     
     lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
     lng = df[df['PLACE'] == loca]['longitude'].unique()[0]

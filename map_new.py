@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 st.title("Check safety status on the map ")
 with open("final_lat.csv", "rb") as f:
     encoding = chardet.detect(f.read())["encoding"]
-df = pd.read_csv("final_lat.csv", encoding=encoding
+df = pd.read_csv("final_lat.csv", encoding=encoding)
 city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
 
 def create_dataframe(loca):

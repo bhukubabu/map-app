@@ -8,7 +8,7 @@ from streamlit_folium import st_folium
 import streamlit.components.v1 as components
 from matplotlib import pyplot as plt
 
-st.title("Check safety status on the map ")
+st.title("Check safety status on the map 🗺️")
 with open("final_lat.csv", "rb") as f:
     encoding = chardet.detect(f.read())["encoding"]
 df = pd.read_csv("final_lat.csv", encoding=encoding)

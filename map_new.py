@@ -85,7 +85,7 @@ if option and option != " ":
     else:
         st.warning("Its a medium crime zone")
     st.markdown("If you want more information about the location you can ask our chat bot or get the recent news about the place from our news bot. Hre are few plots for your convinence....")
-    display_crime_chart(option)
+    #display_crime_chart(option)
 else:
     st.write("Please select a location.")
 

@@ -42,7 +42,7 @@ def create_dataframe(loca):
     }
     # heatmap to the map based on latitude, longitude, and intensity
     HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
-    return crime_map,level
+    return crime_map._repr_html_(),level
 
 def user_loc(loca, map_html):
     """Display the map in Streamlit."""

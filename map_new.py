@@ -39,7 +39,7 @@ def create_dataframe(loca):
     map_html=crime_map._repr_html_()
     try:    
             """Display the map in Streamlit."""
-            with st.container(height=400):
+            with st.container(height=420):
                 st.markdown(f"Showing results for {loca}")
                 #d=st_folium(crime_map,width=650)
                 components.html(map_html, height=350, width=600)

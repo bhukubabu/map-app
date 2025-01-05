@@ -40,7 +40,9 @@ def create_dataframe(loca):
     #crime_map.save("crime_map.html")
     try:    
             """Display the map in Streamlit."""
-            folium_static(crime_map,width=650)
+            with st.container(height=400):
+                st.markdown(f"Showing results for {loca}")
+                folium_static(crime_map,width=650)
             
     except Exception as e:
             st.error(f"{e}")

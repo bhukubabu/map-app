@@ -91,7 +91,7 @@ if option and option != " ":
 
     # Display bar chart of crime types
     st.subheader('Crime Type Distribution')
-    display_crime_chart(option)
+    #display_crime_chart(option)
 else:
     st.write("Please select a location.")
 

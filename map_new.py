@@ -38,7 +38,9 @@ def create_dataframe(loca):
     # heatmap to the map based on latitude, longitude, and intensity
     HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
     #crime_map.save("crime_map.html")
-    return crime_map._repr_html_()
+     """Display the map in Streamlit."""
+    with st.expander(f"Showing results for {loca}",expanded=True):
+        components.html(crime_map._repr_html_(), height=600, width=550)   
 
 def user_loc(loca, map_html):
     """Display the map in Streamlit."""
@@ -78,8 +80,8 @@ city_list_ = list(city_list)
 option = st.selectbox("Select city", city_list_,index=None)
 
 if option and option.index != None:
-    crime_map = create_dataframe(option)
-    user_loc(option, crime_map)
+    create_dataframe(option)
+    #user_loc(option, crime_map)
     level = df[df['PLACE'] == option]['level'].unique()[0]
     if level=="low":
         st.success("You are in safe zone")

@@ -41,6 +41,7 @@ def create_dataframe(loca):
     try:    
             """Display the map in Streamlit."""
             data=st_folium(crime_map_,width=650)
+            st.markdown(data)
     except Exception as e:
             st.error(f"{e}")
 

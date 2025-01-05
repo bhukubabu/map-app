@@ -8,20 +8,14 @@ from streamlit_folium import st_folium
 import streamlit.components.v1 as components
 from matplotlib import pyplot as plt
 
-st.title("Check safety status on the map 🗺️")
-with open("final_lat.csv", "rb") as f:
-    encoding = chardet.detect(f.read())["encoding"]
-df = pd.read_csv("final_lat.csv", encoding=encoding)
-df.dropna(inplace=True)
-city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
+
 
 def create_dataframe(loca):
-    
-    
+        
     lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
     lng = df[df['PLACE'] == loca]['longitude'].unique()[0]
     cluster = df[df['PLACE'] == loca]['cluster'].unique()[0]
-    level = df[df['PLACE'] == loca]['level'].unique()[0]
+    
     map_center = [lat, lng]
     coords = df[['latitude', 'longitude','intse']]
 
@@ -44,7 +38,7 @@ def create_dataframe(loca):
     # heatmap to the map based on latitude, longitude, and intensity
     HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
     #crime_map.save("crime_map.html")
-    return crime_map._repr_html_(), level
+    return crime_map._repr_html_()
 
 def user_loc(loca, map_html):
     """Display the map in Streamlit."""
@@ -70,12 +64,24 @@ def display_crime_chart(loca):
     ax.set_xlabel('Crime Type')
     ax.set_ylabel('Count')
     st.pyplot(fig)
-city_list = [" "] + list(city_list)
-option = st.selectbox("Select city", city_list)
+
+
+
+st.title("Check safety status on the map 🗺️")
+with open("final_lat.csv", "rb") as f:
+    encoding = chardet.detect(f.read())["encoding"]
+df = pd.read_csv("final_lat.csv", encoding=encoding)
+df.dropna(inplace=True)
+city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
+
+city_list_ = [" "] + list(city_list)
+option = st.selectbox("Select city", city_list_)
+
 
 if option and option != " ":
-    crime_map,level = create_dataframe(option)
+    crime_map = create_dataframe(option)
     user_loc(option, crime_map)
+    level = df[df['PLACE'] == option]['level'].unique()[0]
     if level=="low":
         st.success("You are in safe zone")
     else:
@@ -85,4 +91,4 @@ if option and option != " ":
 else:
     st.write("Please select a location.")
 
-#print("Map has been saved as crime_clusters_map.html")
+print("Map has been saved as crime_clusters_map.html")

@@ -15,7 +15,7 @@ def create_dataframe(loca):
     lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
     lng = df[df['PLACE'] == loca]['longitude'].unique()[0]
     cluster = df[df['PLACE'] == loca]['cluster'].unique()[0]
-    
+    level = df[df['PLACE'] == loca]['level'].unique()[0]
     map_center = [lat, lng]
     coords = df[['latitude', 'longitude','intse']]
 

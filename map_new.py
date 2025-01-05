@@ -4,7 +4,7 @@ import folium
 from folium.plugins import HeatMap
 from geopy.geocoders import Nominatim
 import streamlit as st
-from streamlit_folium import folium_static
+from streamlit_folium import folium_static,st_folium
 import streamlit.components.v1 as components
 from matplotlib import pyplot as plt
 
@@ -40,7 +40,7 @@ def create_dataframe(loca):
             """Display the map in Streamlit."""
             with st.container(height=400):
                 st.markdown(f"Showing results for {loca}")
-                folium_static(crime_map,width=650)
+                d=st_folium(crime_map,width=650)
             
     except Exception as e:
             st.error(f"{e}")

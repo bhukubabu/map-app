@@ -39,8 +39,7 @@ def create_dataframe(loca):
     HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
     #crime_map.save("crime_map.html")
     """Display the map in Streamlit."""
-    with st.expander(f"Showing results for {loca}",expanded=True):
-        components.html(crime_map._repr_html_(), height=600, width=550)   
+    data=st_folium(crime_map,width=650)
 
 def user_loc(loca, map_html):
     """Display the map in Streamlit."""

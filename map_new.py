@@ -4,7 +4,7 @@ import folium
 from folium.plugins import HeatMap
 from geopy.geocoders import Nominatim
 import streamlit as st
-from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 import streamlit.components.v1 as components
 from matplotlib import pyplot as plt
 
@@ -23,7 +23,7 @@ def create_dataframe(loca):
     crime_map = folium.Map(location=map_center, zoom_start=8, control_scale=True)
 
     # Add a marker for the center location with crime level information
-    crime_map_=folium.Marker(
+    folium.Marker(
         location=map_center,
         popup=f"Crime Zone Level: {level}",
         icon=folium.Icon(color="red", icon="info-sign")
@@ -36,12 +36,12 @@ def create_dataframe(loca):
         1.0: 'red'     # high intensity
     }
     # heatmap to the map based on latitude, longitude, and intensity
-    #HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
+    HeatMap(data=coords[['latitude', 'longitude',"intse"]].values, blur=20, radius=8,gradient=gradient,blurr=1).add_to(crime_map)
     #crime_map.save("crime_map.html")
     try:    
             """Display the map in Streamlit."""
-            data=st_folium(crime_map_,width=650)
-            st.markdown(data)
+            folium_static(crime_map_,width=650)
+            
     except Exception as e:
             st.error(f"{e}")
 

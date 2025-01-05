@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+#from sklearn.preprocessing import StandardScaler
 import chardet
 import folium
 from folium.plugins import HeatMap

@@ -23,7 +23,7 @@ def create_dataframe(loca):
     crime_map = folium.Map(location=map_center, zoom_start=8, control_scale=True)
 
     # Add a marker for the center location with crime level information
-    folium.Marker(
+    crime_map_=folium.Marker(
         location=map_center,
         popup=f"Crime Zone Level: {level}",
         icon=folium.Icon(color="red", icon="info-sign")
@@ -40,9 +40,9 @@ def create_dataframe(loca):
     #crime_map.save("crime_map.html")
     try:    
             """Display the map in Streamlit."""
-            data=st_folium(crime_map,width=650)
+            data=st_folium(crime_map_,width=650)
     except Exception as e:
-            st.markdown(f"{e}")
+            st.error(f"{e}")
 
 def user_loc(loca, map_html):
     """Display the map in Streamlit."""

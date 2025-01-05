@@ -74,11 +74,10 @@ df = pd.read_csv("final_lat.csv", encoding=encoding)
 df.dropna(inplace=True)
 city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
 
-city_list_ = [" "] + list(city_list)
-option = st.selectbox("Select city", city_list_)
+city_list_ = list(city_list)
+option = st.selectbox("Select city", city_list_,index=None)
 
-
-if option and option != " ":
+if option and option.index != None:
     crime_map = create_dataframe(option)
     user_loc(option, crime_map)
     level = df[df['PLACE'] == option]['level'].unique()[0]

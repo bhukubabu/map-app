@@ -42,15 +42,11 @@ def create_dataframe(loca):
             with st.container(height=400):
                 st.markdown(f"Showing results for {loca}")
                 #d=st_folium(crime_map,width=650)
-                components.html(map_html, height=350, width=550)
+                components.html(map_html, height=350, width=600)
             
     except Exception as e:
             st.error(f"{e}")
 
-def user_loc(loca, map_html):
-    """Display the map in Streamlit."""
-    with st.expander(f"Showing results for {loca}",expanded=True):
-        components.html(map_html, height=600, width=550)
 
 def display_crime_chart(loca):
     """Display a bar chart of crime types for the selected location."""

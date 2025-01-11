@@ -35,6 +35,8 @@ def create_dataframe(loca,df):
     #coords=list(map(list,zip(df['latitude'], df['longitude'],df['intse'])))
     #st.write(type(coords))
     # Initialize map centered on the selected location
+    crd=df[['latitude','longitude','intse']]
+    val=crd.values.tolist()
     crime_map = folium.Map(location=map_center, zoom_start=8, control_scale=True)
     # Add a marker for the center location with crime level information
     folium.Marker(
@@ -50,7 +52,7 @@ def create_dataframe(loca,df):
         1.0: 'red'     # high intensity
     }
     # heatmap to the map based on latitude, longitude, and intensity
-    #HeatMap(data=coords, blur=20, radius=8,gradient=gradient).add_to(crime_map)
+    HeatMap(data=val, blur=20, radius=8,gradient=gradient).add_to(crime_map)
     #crime_map.save("crime_map.html")
     map_html=crime_map._repr_html_()
     try:    

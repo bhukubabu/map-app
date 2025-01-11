@@ -19,99 +19,102 @@ def load_preprocess():
     return df
 
 
-def save_heatmap(df):
-    """Generate and save heatmap as an HTML file."""
+def create_dataframe(loca,df):
+        
+    lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
+    lng = df[df['PLACE'] == loca]['longitude'].unique()[0]
+    cluster = df[df['PLACE'] == loca]['cluster'].unique()[0]
+    level = df[df['PLACE'] == loca]['level'].unique()[0]
+    map_center = [lat, lng]
     df['intse_normalized'] = df['intse'] / df['intse'].max()
     coords = [
         [row['latitude'], row['longitude'], row['intse_normalized']]
         for _, row in df.iterrows()
         if not pd.isnull(row['intse_normalized']) and row['intse_normalized'] > 0
     ]
-
-    map_center = [df['latitude'].mean(), df['longitude'].mean()]
-    crime_map = folium.Map(location=map_center, zoom_start=8, control_scale=True)
-
+    #coords=list(map(list,zip(df['latitude'], df['longitude'],df['intse'])))
+    #st.write(type(coords))
+    # Initialize map centered on the selected location
+    crd=df[['latitude','longitude','intse_normalized']]
+    val=crd.values.tolist()
+    crime_map = folium.Map(location=[lat,lng], zoom_start=8, control_scale=True)
+    # Add a marker for the center location with crime level information
+    folium.Marker(
+        location=[lat,lng],
+        popup=f"Crime Zone Level: {level}",
+        icon=folium.Icon(color="red", icon="info-sign")
+    ).add_to(crime_map)
     gradient = {
-        0.2: 'blue',
-        0.4: 'cyan',
-        0.6: 'lime',
+        0.2: 'blue',   # low intensity
+        0.4: 'cyan',   
+        0.6: 'lime',   
         0.8: 'orange',
-        1.0: 'red',
+        1.0: 'red'     # high intensity
     }
-
-    HeatMap(data=coords, blur=20, radius=8, gradient=gradient).add_to(crime_map)
-    crime_map.save("crime_heatmap.html")
-    st.success("Heatmap saved successfully!")
-
-
-def load_and_display_heatmap(loca, df):
-    """Load saved heatmap and add a marker for the selected location."""
+    # heatmap to the map based on latitude, longitude, and intensity
     try:
-        with open("crime_heatmap.html", "r", encoding="utf-8") as f:
-            heatmap_html = f.read()
-        
-        lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
-        lng = df[df['PLACE'] == loca]['longitude'].unique()[0]
-        level = df[df['PLACE'] == loca]['level'].unique()[0]
-
-        folium_map = folium.Map(location=[lat, lng], zoom_start=10, control_scale=True)
-        folium.Marker(
-            location=[lat, lng],
-            popup=f"Crime Zone Level: {level}",
-            icon=folium.Icon(color="red", icon="info-sign"),
-        ).add_to(folium_map)
-
-        st.markdown(f"### Safety Status for {loca}")
-        st.components.v1.html(heatmap_html, height=500, width=700)
+        HeatMap(data=val, blur=20, radius=8, gradient=gradient).add_to(crime_map)
+        map_html=crime_map._repr_html_()
+    except Execption as e:
+        st.error(f"{e}")
+    #crime_map.save("crime_map.html")
+    
+    try:    
+            #"""Display the map in Streamlit."""
+            with st.container(height=350):
+                st.markdown(f"Showing results for {loca}")
+                #st_folium(crime_map,width=650)
+                #folium_static(crime_map)
+                components.html(map_html, height=350, width=600)
     except Exception as e:
-        st.error(f"Error loading heatmap: {e}")
+            st.error(f"{e}")
 
 
-def display_crime_charts(loca, df):
-    """Display bar charts for different crime types."""
+def display_crime_chart(loca,df):
+    """Display a bar chart of crime types for the selected location."""
     location_data = df[df['PLACE'] == loca]
 
-    # Plot Murder Chart
-    fig1, ax1 = plt.subplots()
-    location_data['MURDER'].value_counts().plot(kind="bar", ax=ax1, color="skyblue")
-    ax1.set_title(f"Murder Count in {loca}")
-    ax1.set_xlabel("Crime Type")
-    ax1.set_ylabel("Count")
-    st.pyplot(fig1)
+    # Group by crime type and count occurrences
+    crime_counts = location_data['MURDER'].value_counts()
+    crime_counts2 = location_data['DOWRY DEATHS'].value_counts()
+    # Plotting the bar chart
+    fig, ax = plt.subplots()
+    crime_counts.plot(kind='bar', ax=ax, color='skyblue')
+    ax.set_title(f'Murder in {loca}')
+    ax.set_xlabel('Crime Type')
+    ax.set_ylabel('Count')
+    st.pyplot(fig)
+    crime_counts2.plot(kind='bar', ax=ax, color='skyblue')
+    ax.set_title(f'DOWRY DEATHS in {loca}')
+    ax.set_xlabel('Crime Type')
+    ax.set_ylabel('Count')
+    st.pyplot(fig)
 
-    # Plot Dowry Deaths Chart
-    fig2, ax2 = plt.subplots()
-    location_data['DOWRY DEATHS'].value_counts().plot(kind="bar", ax=ax2, color="lightcoral")
-    ax2.set_title(f"Dowry Deaths Count in {loca}")
-    ax2.set_xlabel("Crime Type")
-    ax2.set_ylabel("Count")
-    st.pyplot(fig2)
 
-
-if __name__ == "__main__":
-    st.title("Check Safety Status on the Map 🗺️")
-    df = load_preprocess()
-
-    # Generate heatmap (run this once)
-    if not st.session_state.get("heatmap_generated", False):
-        save_heatmap(df)
-        st.session_state["heatmap_generated"] = True
-
-    # Dropdown for city selection
-    city_list = df[df["states"] == "West bengal"]["PLACE"].unique()
-    option = st.selectbox("Select City", city_list)
-
+if __name__=="__main__":
+    zone=['low','medium','high']
+    end_msg="""
+            If you want more information about the location you can ask our 
+            chat bot or get the recent news about the place from our news bot.
+            Hre are few plots for your convinence....
+            """
+    st.title("Check safety status on the map 🗺️")
+    df=load_preprocess()
+    city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
+    city_list_ = list(city_list)
+    option = st.selectbox("Select city", city_list_,index=None)
+    
+    
     if option:
-        level = df[df["PLACE"] == option]["level"].unique()[0]
-        load_and_display_heatmap(option, df)
-
-        with st.chat_message("assistant"):
-            if level == "low":
-                st.success("You are in a safe zone. Here are some insights:")
+        level = df[df['PLACE'] == option]['level'].unique()[0]
+        create_dataframe(option,df)
+        with st.chat_message('assistant'):
+            if zone.index(level)==0:
+                st.success("You are in safe zone. "+end_msg)
             else:
-                st.warning("This is a medium crime zone. Here are some insights:")
-
-        display_crime_charts(option, df)
+                st.warning("Its a medium crime zone. "+end_msg)
+            
+        display_crime_chart(option,df)
     else:
-        with st.chat_message("assistant"):
-            st.error("Please select a location from the dropdown.")
+        with st.chat_message('assistant'):
+            st.error("Please select your location from the above dropdown list")

@@ -51,8 +51,8 @@ def create_dataframe(loca):
             """Display the map in Streamlit."""
             with st.container(height=420):
                 st.markdown(f"Showing results for {loca}")
-                #d=st_folium(crime_map,width=650)
-                components.html(map_html, height=350, width=600)
+                st_folium(crime_map,width=650)
+                #components.html(map_html, height=350, width=600)
             
     except Exception as e:
             st.error(f"{e}")

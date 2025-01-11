@@ -19,7 +19,7 @@ def load_preprocess():
     return df
 
 
-def create_dataframe(loca):
+def create_dataframe(loca,df):
         
     lat = df[df['PLACE'] == loca]['latitude'].unique()[0]
     lng = df[df['PLACE'] == loca]['longitude'].unique()[0]
@@ -63,7 +63,7 @@ def create_dataframe(loca):
             st.error(f"{e}")
 
 
-def display_crime_chart(loca):
+def display_crime_chart(loca,df):
     """Display a bar chart of crime types for the selected location."""
     location_data = df[df['PLACE'] == loca]
 

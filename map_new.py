@@ -105,7 +105,7 @@ if __name__=="__main__":
     option = st.selectbox("Select city", city_list_,index=None)
     
     
-    if option and option.index != None:
+    if option:
         level = df[df['PLACE'] == option]['level'].unique()[0]
         create_dataframe(option,df)
         with st.chat_message('assistant'):

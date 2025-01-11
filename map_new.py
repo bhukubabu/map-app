@@ -90,11 +90,10 @@ if __name__=="__main__":
     city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
     city_list_ = list(city_list)
     option = st.selectbox("Select city", city_list_,index=None)
-
+    level = df[df['PLACE'] == option]['level'].unique()[0]
+    
     if option and option.index != None:
-        crime_map = create_dataframe(option)
-        user_loc(option, crime_map)
-        level = df[df['PLACE'] == option]['level'].unique()[0]
+        create_dataframe(option)
         with st.chat_message('assistant'):
             if zone.index(level)==0:
                 st.success("You are in safe zone. "+end_msg)

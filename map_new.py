@@ -115,9 +115,3 @@ if __name__ == "__main__":
     else:
         with st.chat_message("assistant"):
             st.error("Please select a location from the dropdown.")
-
-            
-        display_crime_chart(option,df)
-    else:
-        with st.chat_message('assistant'):
-            st.error("Please select your location from the above dropdown list")

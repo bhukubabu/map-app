@@ -14,7 +14,7 @@ def load_preprocess():
         encoding = chardet.detect(f.read())["encoding"]
     df = pd.read_csv("final_lat.csv", encoding=encoding)
     df.dropna(inplace=True)
-    to_drop=df[(df['latitude']==0.0) | (df['longitude']==0.0)].index
+    to_drop=df[(df['latitude']== 0.0) | (df['longitude']== 0.0)].index
     df.drop(to_drop,inplace=True)
     return df
 

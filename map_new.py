@@ -52,7 +52,10 @@ def create_dataframe(loca,df):
         1.0: 'red'     # high intensity
     }
     # heatmap to the map based on latitude, longitude, and intensity
-    HeatMap(data=val, blur=20, radius=8, gradient=gradient).add_to(crime_map)
+    try:
+        HeatMap(data=val, blur=20, radius=8, gradient=gradient).add_to(crime_map)
+    except Execption as e:
+        st.error(f"{e}")
     #crime_map.save("crime_map.html")
     map_html=crime_map._repr_html_()
     try:    

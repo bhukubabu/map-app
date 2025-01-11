@@ -9,6 +9,15 @@ import streamlit.components.v1 as components
 from matplotlib import pyplot as plt
 
 
+def load_preprocess():
+    with open("final_lat.csv", "rb") as f:
+        encoding = chardet.detect(f.read())["encoding"]
+    df = pd.read_csv("final_lat.csv", encoding=encoding)
+    df.dropna(inplace=True)
+    to_drop=df[(df['latitude']==0.0) | (df['longitude']==0.0)].index
+    df.drop(to_drop,inplace=True)
+    return df
+
 
 def create_dataframe(loca):
         
@@ -69,28 +78,30 @@ def display_crime_chart(loca):
     st.pyplot(fig)
 
 
+if __name__=="__main__":
+    zone=['low','medium','high']
+    end_msg="""
+            If you want more information about the location you can ask our 
+            chat bot or get the recent news about the place from our news bot.
+            Hre are few plots for your convinence....
+            """
+    st.title("Check safety status on the map 🗺️")
+    df=load_preprocess()
+    city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
+    city_list_ = list(city_list)
+    option = st.selectbox("Select city", city_list_,index=None)
 
-st.title("Check safety status on the map 🗺️")
-with open("final_lat.csv", "rb") as f:
-    encoding = chardet.detect(f.read())["encoding"]
-df = pd.read_csv("final_lat.csv", encoding=encoding)
-df.dropna(inplace=True)
-city_list = df[df['states'] == 'West bengal']['PLACE'].unique()
-
-city_list_ = list(city_list)
-option = st.selectbox("Select city", city_list_,index=None)
-
-if option and option.index != None:
-    create_dataframe(option)
-    #user_loc(option, crime_map)
-    level = df[df['PLACE'] == option]['level'].unique()[0]
-    if level=="low":
-        st.success("You are in safe zone")
+    if option and option.index != None:
+        crime_map = create_dataframe(option)
+        user_loc(option, crime_map)
+        level = df[df['PLACE'] == option]['level'].unique()[0]
+        with st.chat_message('assistant'):
+            if zone.index(level)==0:
+                st.success("You are in safe zone. "+end_msg)
+            else:
+                st.warning("Its a medium crime zone. "+end_msg)
+            
+        display_crime_chart(option)
     else:
-        st.warning("Its a medium crime zone")
-    st.markdown("If you want more information about the location you can ask our chat bot or get the recent news about the place from our news bot. Hre are few plots for your convinence....")
-    display_crime_chart(option)
-else:
-    st.write("Please select a location.")
-
-print("Map has been saved as crime_clusters_map.html")
+        with st.chat_message('assistant'):
+            st.error("Please select your location from the above dropdown list")

@@ -54,8 +54,8 @@ def create_dataframe(loca,df):
     #crime_map.save("crime_map.html")
     map_html=crime_map._repr_html_()
     try:    
-            """Display the map in Streamlit."""
-            with st.container():
+            #"""Display the map in Streamlit."""
+            with st.container(height=350):
                 st.markdown(f"Showing results for {loca}")
                 #st_folium(crime_map,width=650)
                 #folium_static(crime_map)

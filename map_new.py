@@ -40,7 +40,7 @@ def create_dataframe(loca,df):
     crime_map = folium.Map(location=map_center, zoom_start=8, control_scale=True)
     # Add a marker for the center location with crime level information
     folium.Marker(
-        location= map_center,
+        location=map_center,
         popup=f"Crime Zone Level: {level}",
         icon=folium.Icon(color="red", icon="info-sign")
     ).add_to(crime_map)

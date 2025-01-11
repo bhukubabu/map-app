@@ -52,16 +52,16 @@ def create_dataframe(loca,df):
         1.0: 'red'     # high intensity
     }
     # heatmap to the map based on latitude, longitude, and intensity
-    HeatMap(data=val, blur=20, radius=8,gradient=gradient).add_to(crime_map)
-    #crime_map.save("crime_map.html")
+    #HeatMap(data=val, blur=20, radius=8,gradient=gradient).add_to(crime_map)
+    crime_map.save("crime_map.html")
     #map_html=crime_map._repr_html_()
     try:    
             #"""Display the map in Streamlit."""
             with st.container(height=350):
                 st.markdown(f"Showing results for {loca}")
                 #st_folium(crime_map,width=650)
-                folium_static(crime_map)
-                #components.html(map_html, height=350, width=600)
+                #folium_static(crime_map)
+                components.html(map_html, height=350, width=600)
     except Exception as e:
             st.error(f"{e}")
 

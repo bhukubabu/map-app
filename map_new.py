@@ -55,7 +55,7 @@ def create_dataframe(loca):
     map_html=crime_map._repr_html_()
     try:    
             """Display the map in Streamlit."""
-            with st.container(height=420):
+            with st.container():
                 st.markdown(f"Showing results for {loca}")
                 #st_folium(crime_map,width=650)
                 components.html(map_html, height=350, width=600)
@@ -99,14 +99,14 @@ if __name__=="__main__":
     level = df[df['PLACE'] == option]['level'].unique()[0]
     
     if option and option.index != None:
-        create_dataframe(option)
+        create_dataframe(option,df)
         with st.chat_message('assistant'):
             if zone.index(level)==0:
                 st.success("You are in safe zone. "+end_msg)
             else:
                 st.warning("Its a medium crime zone. "+end_msg)
             
-        display_crime_chart(option)
+        display_crime_chart(option,df)
     else:
         with st.chat_message('assistant'):
             st.error("Please select your location from the above dropdown list")

@@ -4,7 +4,6 @@ The .ipynb files contains the ML model for clustering the crime zones.We have us
 
 
 
-![Screenshot 2025-02-26 094945](https://github.com/user-attachments/assets/c218309f-ef90-4eaa-8ee9-02973a266d13)
 
 
 
